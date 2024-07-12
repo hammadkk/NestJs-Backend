@@ -4,38 +4,43 @@ import {
   Put,
   Delete,
   Post,
-  HttpException,
   HttpStatus,
   Param,
   ParseIntPipe,
   Body,
+  Query,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { CreateSongDTO } from './dto/create-song-dto';
+import { Pagination } from 'nestjs-typeorm-paginate';
+import { Song } from './song.entity';
 
 @Controller('songs')
 export class SongsController {
   constructor(private songsService: SongsService) {}
+
   @Post()
-  create(@Body() createSongDTO: CreateSongDTO) {
-    return this.songsService.create(createSongDTO);
+  async create(@Body() createSongDTO: CreateSongDTO) {
+    return await this.songsService.create(createSongDTO);
   }
+
   @Get()
-  findAll() {
-    try {
-      return this.songsService.findAll();
-    } catch (e) {
-      throw new HttpException(
-        'server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        {
-          cause: e,
-        },
-      );
-    }
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe)
+    page = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe)
+    limit = 2,
+  ): Promise<Pagination<Song>> {
+    limit = limit > 100 ? 100 : limit;
+    return this.songsService.paginate({
+      page,
+      limit,
+    });
   }
+
   @Get(':id')
-  findOne(
+  async findOne(
     @Param(
       'id',
       new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
@@ -46,12 +51,12 @@ export class SongsController {
   }
 
   @Put(':id')
-  update() {
+  async update() {
     return 'update song on the based on id';
   }
 
   @Delete(':id')
-  delete() {
+  async delete() {
     return 'delete song on the based on id';
   }
 }

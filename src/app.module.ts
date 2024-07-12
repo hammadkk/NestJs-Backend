@@ -1,12 +1,25 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
+import { UsersModule } from './users/users.module';
 import { SongsModule } from './songs/songs.module';
-
+import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
+import ormconfig from './ormconfig';
+import { DataSource } from 'typeorm';
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Module({
-  imports: [UsersModule, SongsModule],
+  imports: [TypeOrmModule.forRoot(ormconfig), UsersModule, SongsModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  constructor(private dataSource: DataSource) {
+    console.log('database', dataSource.driver.database);
+  }
+
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('songs');
+  }
+}
