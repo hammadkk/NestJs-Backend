@@ -1,11 +1,4 @@
-import { Artist } from 'src/artist/artist.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -23,13 +16,4 @@ export class User {
 
   @Column()
   password: string;
-
-  @OneToOne(
-    () => Artist,
-    (artist) => {
-      artist.user;
-    },
-  )
-  @JoinColumn()
-  artist: Artist;
 }

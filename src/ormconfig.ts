@@ -11,6 +11,7 @@ const ormconfig: TypeOrmModuleOptions = {
   database: process.env.DB_DATABASE || 'Spotify-Clone',
   synchronize: process.env.DB_SYNCHRONIZE === 'true' || true,
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
+  //  logging: true,
 };
 
 export default ormconfig;
