@@ -8,12 +8,14 @@ import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import ormconfig from './ormconfig';
 import { DataSource } from 'typeorm';
 import { PlayListModule } from './playlists/playlist.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
     UsersModule,
     SongsModule,
     PlayListModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
