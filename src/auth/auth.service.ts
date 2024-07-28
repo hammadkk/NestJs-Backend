@@ -12,9 +12,7 @@ export class AuthService {
   ) {}
 
   async login(loginDTO: LoginDTO): Promise<{ accessToken: string }> {
-    // 1.
     const user = await this.userService.findOne(loginDTO);
-    console.log('user', user);
 
     const passwordMatched = await bcrypt.compare(
       loginDTO.password,
