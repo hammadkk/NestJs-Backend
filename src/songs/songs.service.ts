@@ -10,7 +10,7 @@ import { Song } from './song.entity';
 import { CreateSongDTO } from './dto/create-song-dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateSongDto } from './dto/update-song-dto';
-import { Artist } from 'src/artist/artist.entity';
+import { Artist } from 'src/artists/artists.entity';
 
 @Injectable()
 export class SongsService {

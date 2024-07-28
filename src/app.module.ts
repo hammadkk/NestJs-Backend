@@ -9,6 +9,8 @@ import ormconfig from './ormconfig';
 import { DataSource } from 'typeorm';
 import { PlayListModule } from './playlists/playlist.module';
 import { AuthModule } from './auth/auth.module';
+import { ArtistsModule } from './artists/artists.module';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
@@ -16,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
     SongsModule,
     PlayListModule,
     AuthModule,
+    ArtistsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -10,17 +10,20 @@ import {
   Body,
   Query,
   DefaultValuePipe,
+  UseGuards,
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { CreateSongDTO } from './dto/create-song-dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { Song } from './song.entity';
+import { ArtistJwtGuard } from 'src/auth/artists-jwt-guard';
 
 @Controller('songs')
 export class SongsController {
   constructor(private songsService: SongsService) {}
 
   @Post()
+  @UseGuards(ArtistJwtGuard)
   async create(@Body() createSongDTO: CreateSongDTO) {
     return await this.songsService.create(createSongDTO);
   }
