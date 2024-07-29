@@ -4,7 +4,8 @@ import * as bcrypt from 'bcryptjs';
 import { LoginDTO } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ArtistsService } from 'src/artists/artists.service';
-import { PayloadType } from './types';
+import { Enable2FAType, PayloadType } from './types';
+import * as speakeasy from 'speakeasy';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +27,6 @@ export class AuthService {
       delete user.password;
       const payload: PayloadType = { email: user.email, userId: user.id };
       const artist = await this.artistsService.findArtist(user.id);
-      console.log('artist', artist);
       if (artist) {
         payload.artistId = artist.id;
       }
@@ -36,5 +36,17 @@ export class AuthService {
     } else {
       throw new UnauthorizedException('Password does not match');
     }
+  }
+
+  async enable2FA(userId: number): Promise<Enable2FAType> {
+    const user = await this.userService.findById(userId);
+    if (user.enable2FA) {
+      return { secret: user.twoFASecret };
+    }
+    const secret = speakeasy.generateSecret();
+    console.log(secret);
+    user.twoFASecret = secret.base32;
+    await this.userService.updateSecretKey(user.id, user.twoFASecret);
+    return { secret: user.twoFASecret };
   }
 }
