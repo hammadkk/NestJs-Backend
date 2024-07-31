@@ -9,7 +9,8 @@ const ormconfig: TypeOrmModuleOptions = {
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || '123456',
   database: process.env.DB_DATABASE || 'Spotify-Clone',
-  synchronize: process.env.DB_SYNCHRONIZE === 'true' || true,
+  // synchronize: process.env.DB_SYNCHRONIZE === 'true' || true,
+  synchronize: false,
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   //  logging: true,
 };

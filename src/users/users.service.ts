@@ -41,4 +41,13 @@ export class UsersService {
       },
     );
   }
+  async disable2FA(userId: number): Promise<UpdateResult> {
+    return this.userRepository.update(
+      { id: userId },
+      {
+        enable2FA: false,
+        twoFASecret: null,
+      },
+    );
+  }
 }
