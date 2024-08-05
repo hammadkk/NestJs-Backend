@@ -10,6 +10,7 @@ import { PlayListModule } from './playlists/playlist.module';
 import { AuthModule } from './auth/auth.module';
 import { ArtistsModule } from './artists/artists.module';
 import { ormconfig } from 'db/data-source';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ormconfig } from 'db/data-source';
     PlayListModule,
     AuthModule,
     ArtistsModule,
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [AppService],
