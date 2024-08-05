@@ -1,8 +1,8 @@
 // ormconfig.ts
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
+import { DataSource, DataSourceOptions } from 'typeorm';
 dotenv.config();
-const ormconfig: TypeOrmModuleOptions = {
+export const ormconfig: DataSourceOptions = {
   type: 'postgres',
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT, 10) || 5432,
@@ -11,8 +11,9 @@ const ormconfig: TypeOrmModuleOptions = {
   database: process.env.DB_DATABASE || 'Spotify-Clone',
   // synchronize: process.env.DB_SYNCHRONIZE === 'true' || true,
   synchronize: false,
-  entities: [__dirname + '/**/*.entity{.ts,.js}'],
+  entities: ['dist/**/*.entity.js'],
+  migrations: ['dist/db/migrations/*.js'],
   //  logging: true,
 };
-
-export default ormconfig;
+const dataSource = new DataSource(ormconfig);
+export default dataSource;

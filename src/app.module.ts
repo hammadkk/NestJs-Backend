@@ -5,11 +5,11 @@ import { AppController } from './app.controller';
 import { UsersModule } from './users/users.module';
 import { SongsModule } from './songs/songs.module';
 import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
-import ormconfig from './ormconfig';
 import { DataSource } from 'typeorm';
 import { PlayListModule } from './playlists/playlist.module';
 import { AuthModule } from './auth/auth.module';
 import { ArtistsModule } from './artists/artists.module';
+import { ormconfig } from 'db/data-source';
 
 @Module({
   imports: [
