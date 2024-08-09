@@ -1,19 +1,41 @@
-// ormconfig.ts
-import * as dotenv from 'dotenv';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import {
+  TypeOrmModuleAsyncOptions,
+  TypeOrmModuleOptions,
+} from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
-dotenv.config();
-export const ormconfig: DataSourceOptions = {
-  type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT, 10) || 5432,
-  username: process.env.DB_USERNAME || 'postgres',
-  password: process.env.DB_PASSWORD || '123456',
-  database: process.env.DB_DATABASE || 'Spotify-Clone',
-  // synchronize: process.env.DB_SYNCHRONIZE === 'true' || true,
-  synchronize: false,
-  entities: ['dist/**/*.entity.js'],
-  migrations: ['dist/db/migrations/*.js'],
-  //  logging: true,
+
+export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
+  imports: [ConfigModule],
+  inject: [ConfigService],
+  useFactory: async (
+    configService: ConfigService,
+  ): Promise<TypeOrmModuleOptions> => {
+    return {
+      type: 'postgres',
+      host: configService.get<string>('dbHost'),
+      port: configService.get<number>('dbPort'),
+      username: configService.get<string>('db_username'),
+      database: configService.get<string>('dbName'),
+      password: configService.get<string>('password'),
+      entities: ['dist/**/*.entity.js'],
+      synchronize: false,
+      migrations: ['dist/db/migrations/*.js'],
+    };
+  },
 };
-const dataSource = new DataSource(ormconfig);
+
+export const dataSourceOptions: DataSourceOptions = {
+  type: 'postgres',
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT),
+  username: process.env.USERNAME,
+  database: process.env.DB_NAME,
+  password: process.env.PASSWORD,
+  entities: ['dist/**/*.entity.js'],
+  synchronize: false,
+  migrations: ['dist/db/migrations/*.js'],
+};
+
+const dataSource = new DataSource(dataSourceOptions);
 export default dataSource;

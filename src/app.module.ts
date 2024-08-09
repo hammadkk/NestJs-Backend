@@ -9,7 +9,7 @@ import { DataSource } from 'typeorm';
 import { PlayListModule } from './playlists/playlist.module';
 import { AuthModule } from './auth/auth.module';
 import { ArtistsModule } from './artists/artists.module';
-import { ormconfig } from 'db/data-source';
+import { typeOrmAsyncConfig } from 'db/data-source';
 import { SeedModule } from './seed/seed.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
@@ -21,11 +21,11 @@ import configuration from './config/configuration';
       isGlobal: true,
       load: [configuration],
     }),
-    TypeOrmModule.forRoot(ormconfig),
-    UsersModule,
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     SongsModule,
     PlayListModule,
     AuthModule,
+    UsersModule,
     ArtistsModule,
     SeedModule,
   ],
