@@ -5,6 +5,8 @@ import { GlobalExceptionFilter } from './common/filters/global-exception.filter'
 import { ConfigService } from '@nestjs/config';
 // import { SeedService } from './seed/seed.service';
 
+declare const module: any;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
@@ -13,5 +15,10 @@ async function bootstrap() {
   // await seedService.seed();
   const configService = app.get(ConfigService);
   await app.listen(configService.get<number>('port'));
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 bootstrap();
