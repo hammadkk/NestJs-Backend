@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { ConfigService } from '@nestjs/config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 // import { SeedService } from './seed/seed.service';
 
 declare const module: any;
@@ -13,6 +14,16 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalExceptionFilter());
   // const seedService = app.get(SeedService);
   // await seedService.seed();
+
+  const config = new DocumentBuilder()
+    .setTitle('Spotify Clone')
+    .setDescription('The Spotify Clone Api documentation')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   const configService = app.get(ConfigService);
   await app.listen(configService.get<number>('port'));
 
